@@ -1,0 +1,19 @@
+version: '3.6'
+
+x-restart-policy: &restart_policy
+  restart: unless-stopped
+
+services:
+  postgres:
+    << : *restart_policy
+    image: postgres:12
+    volumes:
+    - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+    - "3254:5432"
+
+volumes:
+  db_data:
